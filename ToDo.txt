@@ -1,3 +1,0 @@
-Not the priority
-	Get bootstrap to be a local thing so it doesn't have to do the CDN thing.
-
