@@ -1,7 +1,6 @@
 // Handy function called when the page loads and also allows the link back from the thank you screen to
 // perform the same job.
 function loadForm() {
-    console.log(rootFolder);
     $('.content').load(rootFolder + 'php/form.php', function() {
         let enquiryField = $('#enquiry');
         let emailField = $('#email');
@@ -19,15 +18,16 @@ function loadForm() {
             $('.form-control-feedback').removeClass('glyphicon-ok');
             $('.form-control-feedback').removeClass('glyphicon-remove');
 
+            // Get the first field in focus ready for input
             $('#name').focus();
 
-
+            // Clear any tooltips that may have been visible
             enquiryField.tooltip('destroy');
             emailField.tooltip('destroy');
             nameField.tooltip('destroy');
-            
         });
 
+        // A helper function to get a tooltip object for Bootstrap's tooltip component
         function getTooltipObject(text) {
             return {
                 title: text,
@@ -37,24 +37,31 @@ function loadForm() {
             }
         }
 
+        // Ensure the name field has some input. If it doesn't, tell the user
         function validateName() {
             let nameText = $.trim($('#name').val());
             let validName = nameText !== '';
+
+            // Make the field red if name is invalid
             $('#name-form-group').toggleClass('has-error', !validName);
+
+            // Display the cross and hide the okay icons based on the validity of the current input
             $('#name-form-group .form-control-feedback').toggleClass('glyphicon-ok', validName)
             $('#name-form-group .form-control-feedback').toggleClass('glyphicon-remove', !validName)
             
+            // If the field's not valid, tell the user why via a tooltip, otherwise hide it
             if(!validName) {
                 nameField.tooltip(getTooltipObject('You must enter a name')).tooltip('show');
             } else {
                 nameField.tooltip('destroy');
             }
 
+            // Return the validity of the name field.
             return validName;
         }
 
 
-
+        // Same story here, only the email has to be checked with a separate isValidEmail function
         function validateEmail() {
             let emailText = $.trim($('#email').val());
             let validEmail = isValidEmail(emailText);
@@ -72,6 +79,7 @@ function loadForm() {
             return validEmail;
         }
 
+        // Same here, the same as the name field, checking for input
         function validateEnquiry() {
             let enquiryText = $.trim($('#enquiry').val());
             let validEnquiry = enquiryText !== '';
@@ -93,6 +101,7 @@ function loadForm() {
             return validateName() & validateEmail() & validateEnquiry();
         }
 
+        // Ensure validation takes place when the user tabs out of each control
         nameField.change(function() {
             validateName()
         });
@@ -106,13 +115,15 @@ function loadForm() {
         })
 
         $('#submit').click(function() {
-            // Apply colours and error icons if necessary
+            // If all the fields are valid
             if(validateFields()) {
 
+                // Grab their current values
                 let emailText = $.trim($('#email').val());
                 let nameText = $.trim($('#name').val());
                 let enquiryText = $.trim($('#enquiry').val());
 
+                // Send off the data to the php script which will perform its own validation and send the appropriate emails
                 $.post(rootFolder + 'php/handle_enquiry.php', {name: nameText, email: emailText, enquiry: enquiryText}, function(data) {
                     // Clear the main content
                     $('.content').html = '';
@@ -134,6 +145,7 @@ function loadForm() {
             }
         });
         
+        // Helper function to check for email validity
         function isValidEmail(email) {
             var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
             return regex.test(email);

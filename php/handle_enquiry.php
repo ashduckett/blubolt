@@ -51,6 +51,7 @@
 
         echo(generateThankYou($enquiry->getEnquiry()));
     } else {
+
         // Return the errors. User should have used the form, but if they didn't then they will
         // want access to what went wrong.
         echo $errors;    
