@@ -1,9 +1,12 @@
 <?php
     require "DBObjects/Enquiry.class.php";
 
+    // Function to generate a thank you after a user has submitted their enquiry.
+    // Note that htmlspecialchars stops people being able to run JS by typing
+    // script tags into the enquiry box.
     function generateThankYou($enquiry) {
         $html = '<h1>Thank you for your enquiry, here is a copy:</h1>';
-        $html .= ('<p>' . $enquiry . '</p>');
+        $html .= ('<p>' . htmlspecialchars($enquiry) . '</p>');
         return $html;
     }
 
