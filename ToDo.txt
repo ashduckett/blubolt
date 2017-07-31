@@ -1,0 +1,8 @@
+* Add an @ sign for the add-on for the email field.		done
+* When you hit submit, run validation and add error classes where necessary
+
+
+
+Not the priority
+	Get bootstrap to be a local thing so it doesn't have to do the CDN thing.
+
